@@ -32,21 +32,12 @@ Ensure that you have the following installed on your machine:
 
    ```plaintext
    # Database URI
-   DB_URI=mongodb+srv://${username}:${password}@${cluster}/KU360?authSource=${authSource}&authMechanism=${authMechanism}
-   # (Generate the connection string from MongoDB website)
+   DB_URI="connection string from supabase"
 
-
-   # Cloudinary Configuration
-   CLOUDINARY_CLOUD_NAME=<your_cloudinary_cloud_name>
-   CLOUDINARY_API_KEY=<your_cloudinary_api_key>
-   CLOUDINARY_SECRET_KEY=<your_cloudinary_secret_key>
-
-   # Token Secrets
-   ACCESS_TOKEN_SECRET=<your_access_token_secret>
-   REFRESH_TOKEN_SECRET=<your_refresh_token_secret>
-   ```
-
-   Replace placeholder values (`<your_cloudinary_cloud_name>`, `<your_access_token_secret>`, etc.) with your actual configuration values.
+   JWT_SECRET = "any random string"
+   JWT_LIFE = "time"
+   
+    ```
 
 4. Install all required modules:
 
