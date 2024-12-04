@@ -1,5 +1,5 @@
 const instertIntoProfile =
-  "INSERT INTO UserProfiles (user_id, department, year, semester) VALUES ($1, $2, $3, $4)";
+  "INSERT INTO UserProfiles (user_id, school,department, batch) VALUES ($1, $2, $3, $4)";
 
 const getUserDetails = `
       SELECT 

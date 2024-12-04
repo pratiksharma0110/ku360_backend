@@ -10,14 +10,14 @@ const onBoarding = async (req, res) => {
       });
     }
 
-    const { department, year, semester } = req.body;
+    const { school, department, batch } = req.body;
 
-    if (!department || !year || !semester) {
+    if (!school || !department || !batch) {
       return res.status(400).json({
         message: "Please provide all details",
       });
     }
-    const userProfile = [userId, department, year, semester];
+    const userProfile = [userId, school, department, batch];
     await pool.query(userQueries.instertIntoProfile, userProfile);
 
     res.status(200).json({
