@@ -25,7 +25,7 @@ const signUp = async (req, res) => {
 
     await pool.query(authQueries.register, user);
 
-    res.status(200).json({
+    res.status(201).json({
       message: `User ${email} Registered successfully`,
     });
   } catch (err) {

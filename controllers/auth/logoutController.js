@@ -2,7 +2,6 @@ const logout = async (req, res) => {
   try {
     res.clearCookie("token", {
       httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000,
     });
     res.status(200).json({
       message: "Logged out successfully",

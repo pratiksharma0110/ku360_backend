@@ -34,9 +34,10 @@ const login = async (req, res) => {
     });
     res.cookie("token", token, {
       httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000,
     });
-    res.status(200).send("Logged in successfully!");
+    return res.status(200).json({
+      message: "Logged in successfully",
+    });
   } catch (err) {
     console.log(err);
     return res.status(500).json({ message: "Internal Server Error" });
