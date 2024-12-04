@@ -3,7 +3,8 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 
 const authRoutes = require("./routes/auth/authRoutes");
-const userRoutes = require("./routes/userRoute");
+const onBoardingRoutes = require("./routes/onBoardingRoute");
+const userRoutes = require("./routes/userRoutes");
 
 const PORT = process.env.PORT || 5000;
 const app = express();
@@ -14,6 +15,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser(process.env.JWT_SECRET));
 //routes
 app.use("/auth", authRoutes);
+app.use("/onBoarding", onBoardingRoutes);
+app.use("/getCurrentUser", userRoutes);
 
 //default route
 app.get("/", (req, res) => {
