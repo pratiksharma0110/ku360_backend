@@ -5,6 +5,7 @@ const cookieParser = require("cookie-parser");
 const authRoutes = require("./routes/auth/authRoutes");
 const onBoardingRoutes = require("./routes/onBoardingRoute");
 const userRoutes = require("./routes/userRoutes");
+const noticeRoute = require("./routes/noticeRoutes");
 
 const PORT = process.env.PORT || 5000;
 const app = express();
@@ -17,6 +18,7 @@ app.use(cookieParser(process.env.JWT_SECRET));
 app.use("/auth", authRoutes);
 app.use("/onBoarding", onBoardingRoutes);
 app.use("/getCurrentUser", userRoutes);
+app.use("/getExamNotice", noticeRoute);
 
 //default route
 app.get("/", (req, res) => {
