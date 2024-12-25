@@ -10,14 +10,24 @@ const onBoarding = async (req, res) => {
       });
     }
 
-    const { school, department, batch } = req.body;
+    const existingProfile = await pool.query(userQueries.getProfileByUserId, [
+      userId,
+    ]);
 
-    if (!school || !department || !batch) {
+    if (existingProfile.rows.length > 0) {
+      return res.status(400).json({
+        message: "Onboarding already completed.",
+      });
+    }
+
+    const { school, department, year, semester } = req.body;
+
+    if (!school || !department || !year || !semester) {
       return res.status(400).json({
         message: "Please provide all details",
       });
     }
-    const userProfile = [userId, school, department, batch];
+    const userProfile = [userId, school, department, year, semester];
     await pool.query(userQueries.instertIntoProfile, userProfile);
 
     res.status(200).json({
