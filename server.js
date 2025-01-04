@@ -20,9 +20,8 @@ app.use(cookieParser(process.env.JWT_SECRET));
 //routes
 app.use("/auth", authRoutes);
 app.use("/onBoarding", onBoardingRoutes);
-app.use("/getCurrentUser", userRoutes);
+app.use("/user", userRoutes);
 app.use("/getExamNotice", noticeRoute);
-app.use("/upload", uploadMiddleware, userRoutes);
 
 //default route
 app.get("/", (req, res) => {
