@@ -45,6 +45,7 @@ const getExamNotices = async (req, res) => {
     });
 
     await Promise.all(promises);
+
     return res.status(200).json(examNotices);
   } catch (err) {
     console.log(err);
