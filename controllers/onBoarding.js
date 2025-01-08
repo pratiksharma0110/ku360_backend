@@ -33,7 +33,7 @@ const onBoarding = async (req, res) => {
       department,
       year,
       semester,
-      profile_image || null,
+      profile_image || process.env.DEFAULT_PIC,
     ];
     await pool.query(userQueries.instertIntoProfile, userProfile);
 
