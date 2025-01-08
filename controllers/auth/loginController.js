@@ -22,7 +22,7 @@ const login = async (req, res) => {
     const passwordMatch = await bcrypt.compare(password, hashedPassword);
 
     if (!passwordMatch)
-      return res.status(400).json({ message: "Invalid Password" });
+      return res.status(400).json({ message: "Invalid Credentials" });
 
     const userIdresult = await pool.query(authQueries.userId, [email]);
     const userId = userIdresult.rows[0].user_id;
@@ -37,6 +37,7 @@ const login = async (req, res) => {
     });
     return res.status(200).json({
       message: "Logged in successfully",
+      token,
     });
   } catch (err) {
     console.log(err);

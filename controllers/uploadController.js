@@ -1,6 +1,7 @@
 const cloudinary = require("../config/cloudinary");
 
 const upload = (req, res) => {
+  console.log(req);
   if (!req.file)
     return res.status(400).json({
       message: "No image uploaded",
@@ -14,7 +15,7 @@ const upload = (req, res) => {
 
     return res.status(200).json({
       message: "File uploaded to cloudinary",
-      data: result.url,
+      url: result.url,
     });
   });
 };
