@@ -1,6 +1,8 @@
 const pool = require("../database/postgres");
 const bcrypt = require("bcrypt");
 const userQueries = require("../queries/userQueries");
+const getDayOfWeek = require("../utils/day");
+const fetchHelper = require("../utils/fetchHelper");
 
 const userDetails = async (req, res) => {
   try {
@@ -91,8 +93,39 @@ const editUserProfile = async (req, res) => {
     res.sendStatus(500);
   }
 };
+const getCourses = async (req, res) => {
+  const { year_id, semester_id } = req.query;
+
+  if (!year_id || !semester_id) {
+    return res.status(400).send({
+      message: "Bad Request: year_id and semester_id are required",
+    });
+  }
+
+  await fetchHelper(
+    userQueries.fetchCourse,
+    [year_id, semester_id],
+    res,
+    "No courses found for the specified year and semester",
+    "Courses fetched successfully",
+  );
+};
+
+const getRoutine = async (req, res) => {
+  const today = getDayOfWeek();
+
+  await fetchHelper(
+    userQueries.fetchRoutine,
+    [today],
+    res,
+    "No routine found",
+    "Routine fetched successfully",
+  );
+};
 
 module.exports = {
   userDetails,
   editUserProfile,
+  getCourses,
+  getRoutine,
 };
