@@ -26,6 +26,33 @@ const updateLastname = "UPDATE users SET lastname = $1 WHERE user_id = $2";
 const updatePassword =
   "UPDATE users SET hashedpassword = $1 WHERE user_id = $2";
 
+const fetchCourse = `
+SELECT 
+  c.sub_code, 
+  c.sub_name, 
+  c.pdf_link, 
+  c.sub_credit
+
+FROM 
+  courses c
+JOIN 
+  course_semesters cs ON c.id = cs.course_id
+JOIN 
+  years y ON cs.year_id = y.id
+JOIN 
+  semesters s ON cs.semester_id = s.id
+WHERE 
+  y.id = $1  
+  AND s.id = $2;
+`;
+const fetchRoutine = `
+Select r.time,c.sub_code,c.sub_name
+from routines r
+JOIN courses c on r.course_id = c.id
+WHERE day = $1
+
+`;
+
 module.exports = {
   instertIntoProfile,
   getUserDetails,
@@ -34,4 +61,6 @@ module.exports = {
   updateFirstname,
   updateLastname,
   updatePassword,
+  fetchCourse,
+  fetchRoutine,
 };
