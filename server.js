@@ -6,8 +6,6 @@ const authRoutes = require("./routes/auth/authRoutes");
 const onBoardingRoutes = require("./routes/onBoardingRoute");
 const userRoutes = require("./routes/userRoutes");
 const noticeRoute = require("./routes/noticeRoutes");
-const fileUpload = require("express-fileupload");
-const uploadMiddleware = require("./middlewares/uploadMiddleware");
 
 const PORT = process.env.PORT || 5000;
 const app = express();
