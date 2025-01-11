@@ -59,7 +59,25 @@ JOIN courses c ON r.sub_code = c.sub_code
 WHERE r.years_id = $1
   AND r.semester_id = $2 
   AND r.day = $3
-  AND r.department_id = $4;
+  AND r.department_id = $4
+  ORDER BY r.time ASC;
+`;
+
+const fetchAttendance = `
+
+SELECT 
+    course_id,
+    COUNT(*) AS total_classes,
+    SUM(CASE WHEN status = TRUE THEN 1 ELSE 0 END) AS attended_classes,
+    ROUND((SUM(CASE WHEN status = TRUE THEN 1 ELSE 0 END) * 100.0 / COUNT(*)), 2) AS attendance_percentage
+FROM 
+    attendances
+WHERE 
+    user_id = $1
+GROUP BY 
+    course_id
+ORDER BY 
+    course_id;
 `;
 
 module.exports = {
@@ -72,4 +90,5 @@ module.exports = {
   updatePassword,
   fetchCourse,
   fetchRoutine,
+  fetchAttendance,
 };
