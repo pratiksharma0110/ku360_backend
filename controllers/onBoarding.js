@@ -4,7 +4,6 @@ const userQueries = require("../queries/userQueries");
 const onBoarding = async (req, res) => {
   try {
     const userId = req.user;
-    console.log(userId);
     if (!userId) {
       return res.status(400).json({
         message: "User ID is missing. Please log in again.",
