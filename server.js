@@ -1,27 +1,17 @@
-import dotenv from 'dotenv';
-dotenv.config();
+require("dotenv").config();
 
-import express from 'express';
-import cookieParser from 'cookie-parser';
-import fileUpload from 'express-fileupload';
-import cors from 'cors';  // Import cors package
+const express = require("express");
+const cookieParser = require("cookie-parser");
+const fileUpload = require("express-fileupload");
 
-import otpRoutes from './routes/auth/otp.js'; 
-import authRoutes from './routes/auth/authRoutes.js';
-import onBoardingRoutes from './routes/onBoardingRoute.js';
-import userRoutes from './routes/userRoutes.js';
-import noticeRoute from './routes/noticeRoutes.js';
-import uploadMiddleware from './middlewares/uploadMiddleware.js';
+const otpRoutes = require("./routes/auth/otp.js");
+const authRoutes = require("./routes/auth/authRoutes.js");
+const onBoardingRoutes = require("./routes/onBoardingRoute.js");
+const userRoutes = require("./routes/userRoutes.js");
+const noticeRoute = require("./routes/noticeRoutes.js");
 
 const PORT = process.env.PORT || 5000;
 const app = express();
-
-// Enable CORS for all routes and origins
-app.use(cors());
-
-// Alternatively, specify allowed origins like this:
-// const allowedOrigins = ['http://localhost:62973'];  // Add your frontend URL here
-// app.use(cors({ origin: allowedOrigins }));
 
 // Middlewares:
 app.use(express.json()); // To parse JSON bodies
@@ -34,7 +24,7 @@ app.use("/auth", authRoutes);
 app.use("/onBoarding", onBoardingRoutes);
 app.use("/user", userRoutes);
 app.use("/getExamNotice", noticeRoute);
-app.use('/api', otpRoutes);
+app.use("/api", otpRoutes);
 
 // Default route
 app.get("/", (req, res) => {
@@ -42,6 +32,6 @@ app.get("/", (req, res) => {
 });
 
 // Start the server
-app.listen(PORT, '192.168.1.68', () => {
+app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
