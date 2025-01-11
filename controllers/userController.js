@@ -4,6 +4,37 @@ const userQueries = require("../queries/userQueries");
 const getDayOfWeek = require("../utils/day");
 const fetchHelper = require("../utils/fetchHelper");
 
+const checkOnboardingStatus = async (req, res) => {
+  try {
+    const userId = req.user;
+    if (!userId) {
+      return res
+        .status(401)
+        .json({ message: "Unauthorized: Missing user ID." });
+    }
+
+    const result = await pool.query(userQueries.getProfileByUserId, [userId]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        on_boarding: false,
+        message: "User profile not found.",
+      });
+    }
+
+    const onBoardingStatus = result.rows[0].has_onboarded;
+
+    return res.status(200).json({
+      on_boarding: onBoardingStatus,
+    });
+  } catch (error) {
+    console.error("Error checking onboarding status:", error);
+    res.status(500).json({
+      message: "Error checking onboarding status.",
+    });
+  }
+};
+
 const userDetails = async (req, res) => {
   try {
     const userId = req.user;
@@ -112,18 +143,35 @@ const getCourses = async (req, res) => {
 };
 
 const getRoutine = async (req, res) => {
-  const today = getDayOfWeek();
+  const { year_id, semester_id, department_id } = req.query;
+  const day = getDayOfWeek();
 
-  await fetchHelper(
-    userQueries.fetchRoutine,
-    [today],
-    res,
-    "No routine found",
-    "Routine fetched successfully",
-  );
+  if (!year_id || !semester_id || !department_id) {
+    return res.status(400).send({
+      message: "Bad Request: year_id and semester_id are required",
+    });
+  }
+
+  const department = parseInt(department_id);
+
+  if (day != 7) {
+    await fetchHelper(
+      userQueries.fetchRoutine,
+      [year_id, semester_id, day, department],
+      res,
+
+      "No routine found",
+      "Routine fetched successfully",
+    );
+  }
+  res.status(200).json({
+    data: [],
+    message: "Saturday. Enjoy your Holiday",
+  });
 };
 
 module.exports = {
+  checkOnboardingStatus,
   userDetails,
   editUserProfile,
   getCourses,
