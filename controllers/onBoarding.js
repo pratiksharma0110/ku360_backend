@@ -1,6 +1,5 @@
 const pool = require("../database/postgres");
 const userQueries = require("../queries/userQueries");
-//this is only called once;
 const onBoarding = async (req, res) => {
   try {
     const userId = req.user;
