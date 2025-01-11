@@ -1,17 +1,8 @@
 const getDayOfWeek = () => {
   const today = new Date();
-  const days = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-  ];
+  const day = today.getDay();
 
-  const currentDay = days[today.getDay()];
-  return currentDay;
+  return day + 1;
 };
 
 module.exports = getDayOfWeek;
