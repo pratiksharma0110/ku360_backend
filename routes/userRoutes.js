@@ -1,9 +1,11 @@
 const express = require("express");
 const authenticateUser = require("../middlewares/authenticate");
 const {
+  search,
   userDetails,
   editUserProfile,
   getCourses,
+  getChapters,
   getRoutine,
   checkOnboardingStatus,
 } = require("../controllers/userController");
@@ -16,6 +18,8 @@ router.get("/check-onboarding", authenticateUser, checkOnboardingStatus);
 router.get("/getCurrentUser", authenticateUser, userDetails);
 router.post("/editProfile", authenticateUser, editUserProfile);
 router.get("/getCourses", getCourses);
+router.get("/getChapters", getChapters);
 router.get("/getRoutine", getRoutine);
+router.get("/search", search);
 router.post("/upload", authenticateUser, uploadMiddleware, upload);
 module.exports = router;

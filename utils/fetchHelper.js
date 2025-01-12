@@ -9,20 +9,24 @@ const fetchHelper = async (
 ) => {
   try {
     const information = await pool.query(fetchQuery, params);
-
+    
     if (information.rowCount === 0) {
-      return res.status(404).send({
+      return res.status(404).json({
+        success: false,
         message: noDataMessage,
       });
     }
-
+    
     return res.status(200).json({
+      success: true,
       data: information.rows,
       message: successMessage,
     });
-  } catch (e) {
-    console.error("Error fetching data:", e.message);
-    return res.status(500).send({
+    
+  } catch (error) {
+    console.error("Error fetching data:", error.message);
+    return res.status(500).json({
+      success: false,
       message: "Internal Server Error",
     });
   }

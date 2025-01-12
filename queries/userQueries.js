@@ -29,25 +29,19 @@ const updatePassword =
   "UPDATE users SET hashedpassword = $1 WHERE user_id = $2";
 
 const fetchCourse = `
-SELECT 
-  c.sub_code, 
-  c.sub_name, 
-  c.pdf_link, 
-  c.sub_credit
+  SELECT id, subject_code, subject, pdf_link, credit
+  FROM 
+    subjects s
+  WHERE 
+    year = $1  
+    AND semester = $2
+    AND department = $3;
+  `;
+  
+  const fetchChapter = 'SELECT chapter, subject FROM chapters WHERE subject = $1';
 
-FROM 
-  courses c
-JOIN 
-  course_semesters cs ON c.sub_code = cs.sub_code
-JOIN 
-  years y ON cs.year_id = y.id
-JOIN 
-  semesters s ON cs.semester_id = s.id
-WHERE 
-  y.id = $1  
-  AND s.id = $2;
-`;
-const fetchRoutine = `
+
+  const fetchRoutine = `
 SELECT 
   r.sub_code,
   c.sub_name,
@@ -62,6 +56,12 @@ WHERE r.years_id = $1
   AND r.department_id = $4;
 `;
 
+const enterSubjects = 
+"INSERT INTO Subjects(year, semester, subject_code, subject, pdf_link, credit, department) VALUES ($1,$2,$3,$4,$5,$6,$7)";
+
+const enterChapter = 
+"INSERT INTO chapters(chapter , subject) VALUES ($1,$2)";
+
 module.exports = {
   instertIntoProfile,
   getUserDetails,
@@ -72,4 +72,7 @@ module.exports = {
   updatePassword,
   fetchCourse,
   fetchRoutine,
+  enterSubjects,
+  fetchChapter,
+  enterChapter,
 };

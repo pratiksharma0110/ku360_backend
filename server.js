@@ -5,14 +5,12 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import fileUpload from 'express-fileupload';
 import cors from 'cors';  // Import cors package
-
 import otpRoutes from './routes/auth/otp.js'; 
 import authRoutes from './routes/auth/authRoutes.js';
 import onBoardingRoutes from './routes/onBoardingRoute.js';
 import userRoutes from './routes/userRoutes.js';
 import noticeRoute from './routes/noticeRoutes.js';
 import uploadMiddleware from './middlewares/uploadMiddleware.js';
-
 const PORT = process.env.PORT || 5000;
 const app = express();
 
@@ -45,3 +43,4 @@ app.get("/", (req, res) => {
 app.listen(PORT, '192.168.1.68', () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
