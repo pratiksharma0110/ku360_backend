@@ -27,8 +27,6 @@ const login = async (req, res) => {
     const userIdresult = await pool.query(authQueries.userId, [email]);
     const userId = userIdresult.rows[0].user_id;
 
-    //note to myself: implement accessToken and refreshToken
-
     const token = jwt.sign({ userId }, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_LIFE,
     });

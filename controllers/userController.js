@@ -282,7 +282,7 @@ const getRoutine = async (req, res) => {
   const department = parseInt(department_id);
 
   if (day != 7) {
-    await fetchHelper(
+    return await fetchHelper(
       userQueries.fetchRoutine,
       [year_id, semester_id, day, department],
       res,
@@ -290,10 +290,25 @@ const getRoutine = async (req, res) => {
       "Routine fetched successfully",
     );
   }
-  res.status(200).json({
+  return res.status(200).json({
     data: [],
     message: "Saturday. Enjoy your Holiday",
   });
+};
+
+const attendanceDetails = async (req, res) => {
+  const userId = req.user;
+  if (!userId) {
+    return res.status(400);
+  }
+
+  await fetchHelper(
+    userQueries.fetchAttendance,
+    [userId],
+    res,
+    "No attendance record found",
+    "Attendance fetched successfully",
+  );
 };
 
 module.exports = {
@@ -303,5 +318,10 @@ module.exports = {
   getCourses,
   getChapters,
   getRoutine,
+<<<<<<< HEAD
   search,
 };
+=======
+  attendanceDetails,
+};
+>>>>>>> testing
