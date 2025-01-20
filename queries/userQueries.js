@@ -90,11 +90,8 @@ module.exports = {
   updatePassword,
   fetchCourse,
   fetchRoutine,
-<<<<<<< HEAD
   enterSubjects,
   fetchChapter,
   enterChapter,
-=======
   fetchAttendance,
->>>>>>> testing
-};
+}

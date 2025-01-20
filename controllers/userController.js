@@ -318,10 +318,8 @@ module.exports = {
   getCourses,
   getChapters,
   getRoutine,
-<<<<<<< HEAD
+  attendanceDetails,
   search,
 };
-=======
-  attendanceDetails,
-};
->>>>>>> testing
+  
+
