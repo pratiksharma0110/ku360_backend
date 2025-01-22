@@ -306,13 +306,32 @@ const search = async (req, res) => {
   const { topic_name, chapter_name, course_name } = req.query;
   console.log(req.query);
 
+  // Clean up the chapter name
   const cleanChapterName = chapter_name 
-  ? chapter_name.replace(/^.*[.:]\s*/, '').trim() || chapter_name.replace(/^[\d.\s]*/, '').trim(): '';
-  const searchFor = `${topic_name || ' '} ${cleanChapterName} ${course_name}`;
+    ? chapter_name.replace(/^.*[.:]\s*/, '').trim() || chapter_name.replace(/^[\d.\s]*/, '').trim()
+    : '';
 
+  // List of vague chapter names
+  const vagueChapters = ['Introduction', 'Overview', 'Basics', 'Getting Started', 'Fundamental'];
 
+  // Check if the chapter name is vague
+  const isVagueChapter = vagueChapters.some(
+    (vague) => cleanChapterName.toLowerCase() === vague.toLowerCase()
+  );
+
+  // Check if the chapter name has fewer than 3 words
+  const chapterWordCount = cleanChapterName.split(/\s+/).length;
+  const isShortChapterName = chapterWordCount < 3;
+
+  // Form the search query
+  const searchFor = isVagueChapter || isShortChapterName
+    ? `${topic_name || ''} ${cleanChapterName} ${course_name || ''}`.trim()
+    : `${topic_name || ''} ${cleanChapterName}`.trim();
+
+  // Call the helper function to fetch search results
   return searchHelper.giveResults(searchFor, res);
 };
+
 
 const getRoutine = async (req, res) => {
   const { year_id, semester_id, department_id } = req.query;

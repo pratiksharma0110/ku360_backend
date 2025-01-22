@@ -29,7 +29,7 @@ const getGoogleSearchResults = async (query) => {
                     const link = item.link.toLowerCase();
                     const snippet = item.snippet;
 
-                    const unwantedKeywords = ["catalog", "university", "Syllabus", "Course Desciptions"];
+                    const unwantedKeywords = ["catalog", "university", "Syllabus", "Course Desciptions", "MathOverflow", "Forums", "Disucssion" ];
                     if (
                         unwantedKeywords.some((keyword) => 
                             title.includes(keyword) || link.includes(keyword)
