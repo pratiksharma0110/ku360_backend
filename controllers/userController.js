@@ -66,61 +66,44 @@ const userDetails = async (req, res) => {
 const editUserProfile = async (req, res) => {
   try {
     const userId = req.user;
+    console.log(userId);
     if (!userId) {
       return res.sendStatus(401);
     }
+    const { password, newPassword } = req.body;
+    console.log(password, newPassword); 
 
-    const { firstname, lastname, password, newPassword } = req.body;
-    const validFields = ["firstname", "lastname", "password", "newPassword"];
+    if (!password || !newPassword) {
+      return res.status(400).json({ message: "Both current and new passwords are required" });
+    }
 
-    const invalidFields = Object.keys(req.body).filter(
-      (field) => !validFields.includes(field),
+    const currentPasswordResult = await pool.query(
+      userQueries.extractPassword,
+      [userId],
     );
 
-    if (invalidFields.length > 0) {
-      return res
-        .status(400)
-        .json({ message: `Invalid field(s): ${invalidFields.join(", ")}` });
+    if (currentPasswordResult.rowCount === 0) {
+      return res.status(404).json({ message: "User not found" });
     }
 
-    if (firstname) {
-      const updatedUser = [firstname, userId];
-      await pool.query(userQueries.updateFirstname, updatedUser);
+    const currentHashedPassword = currentPasswordResult.rows[0].hashedpassword;
+
+    // Compare the provided password with the stored hashed password
+    const currentPasswordMatch = await bcrypt.compare(password, currentHashedPassword);
+
+    if (!currentPasswordMatch) {
+      return res.status(403).json({ message: "Incorrect current password" });
     }
-    if (lastname) {
-      const updatedUser = [lastname, userId];
-      await pool.query(userQueries.updateLastname, updatedUser);
-    }
-    if (password && newPassword) {
-      const currentPasswordResult = await pool.query(
-        userQueries.extractPassword,
-        [userId],
-      );
 
-      if (currentPasswordResult.rowCount === 0) {
-        return res.status(404).json({ message: "User not found" });
-      }
+    // Hash the new password and update it in the database
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
 
-      const currentHashedPassword =
-        currentPasswordResult.rows[0].hashedpassword;
+    const updatedUser = [hashedPassword, userId];
+    await pool.query(userQueries.updatePassword, updatedUser);
 
-      const currentPasswordMatch = await bcrypt.compare(
-        password,
-        currentHashedPassword,
-      );
-
-      if (!currentPasswordMatch) {
-        return res.status(403).json({ message: "Incorrect current password" });
-      }
-
-      const saltRounds = 10;
-      const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
-
-      const updatedUser = [hashedPassword, userId];
-      await pool.query(userQueries.updatePassword, updatedUser);
-    }
     return res.status(200).json({
-      message: "Changes made to user",
+      message: "Password changed successfully",
     });
   } catch (err) {
     console.log(err);
@@ -306,49 +289,47 @@ const search = async (req, res) => {
   const { topic_name, chapter_name, course_name } = req.query;
   console.log(req.query);
 
-  // Clean up the chapter name
   const cleanChapterName = chapter_name 
     ? chapter_name.replace(/^.*[.:]\s*/, '').trim() || chapter_name.replace(/^[\d.\s]*/, '').trim()
     : '';
 
-  // List of vague chapter names
   const vagueChapters = ['Introduction', 'Overview', 'Basics', 'Getting Started', 'Fundamental'];
 
-  // Check if the chapter name is vague
   const isVagueChapter = vagueChapters.some(
     (vague) => cleanChapterName.toLowerCase() === vague.toLowerCase()
   );
 
-  // Check if the chapter name has fewer than 3 words
   const chapterWordCount = cleanChapterName.split(/\s+/).length;
   const isShortChapterName = chapterWordCount < 3;
 
-  // Form the search query
   const searchFor = isVagueChapter || isShortChapterName
     ? `${topic_name || ''} ${cleanChapterName} ${course_name || ''}`.trim()
     : `${topic_name || ''} ${cleanChapterName}`.trim();
 
-  // Call the helper function to fetch search results
   return searchHelper.giveResults(searchFor, res);
 };
 
 
 const getRoutine = async (req, res) => {
-  const { year_id, semester_id, department_id } = req.query;
-  const day = getDayOfWeek();
 
+  const { year_id, semester_id, department_id } = req.query;
+  const sday = getDayOfWeek();
+  const day = parseInt(sday); 
+  console.log(day);
   if (!year_id || !semester_id || !department_id) {
     return res.status(400).send({
       message: "Bad Request: year_id and semester_id are required",
     });
   }
-
+  const year = parseInt(year_id);
+  const semester = parseInt(semester_id);
   const department = parseInt(department_id);
+  console.log(typeof day);
 
   if (day != 7) {
     return await fetchHelper(
       userQueries.fetchRoutine,
-      [year_id, semester_id, day, department],
+      [year, semester, day, department],
       res,
       "No routine found",
       "Routine fetched successfully",

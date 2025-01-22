@@ -77,5 +77,4 @@ router.post("/verify-otp", (req, res) => {
     .send({ success: false, message: "Invalid OTP or OTP expired" });
 });
 
-// CommonJS export
 module.exports = router;
