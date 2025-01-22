@@ -262,12 +262,57 @@ const getChapters = async (req, res) => {
   }
 };
 
+const getTopics = async (req, res) => {
+  const { chapter_id } = req.query;
+
+  console.log("Chapter ID:", chapter_id);
+
+  if (!chapter_id) {
+    return res.status(400).json({ 
+      success: false, 
+      error: "Missing parameters: 'chapter_id' is required" 
+    });
+  }
+
+  const intchapter_id = parseInt(chapter_id, 10);
+
+  if (isNaN(intchapter_id)) {
+    return res.status(400).json({ 
+      success: false, 
+      error: "Invalid 'chapter_id'. It must be a number." 
+    });
+  }
+
+  try {
+    await fetchHelper(
+      userQueries.fetchTopic, 
+      [intchapter_id], 
+      res, 
+      "No topics found after fetching.", 
+      "Topics fetched successfully."
+    );
+
+  } catch (error) {
+    console.error("Error in getTopics:", error.message);
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
+  }
+};
+
+
 const search = async (req, res) => {
-  const { chapter_name, course_name } = req.query;
+  const { topic_name, chapter_name, course_name } = req.query;
   console.log(req.query);
-  searchFor = chapter_name + "for" + course_name;
-  searchHelper.giveResults(searchFor, res);
-} 
+
+  const cleanChapterName = chapter_name 
+  ? chapter_name.replace(/^.*[.:]\s*/, '').trim() || chapter_name.replace(/^[\d.\s]*/, '').trim(): '';
+  const searchFor = `${topic_name || ' '} ${cleanChapterName} ${course_name}`;
+
+
+  return searchHelper.giveResults(searchFor, res);
+};
 
 const getRoutine = async (req, res) => {
   const { year_id, semester_id, department_id } = req.query;
@@ -317,6 +362,7 @@ module.exports = {
   editUserProfile,
   getCourses,
   getChapters,
+  getTopics,
   getRoutine,
   attendanceDetails,
   search,

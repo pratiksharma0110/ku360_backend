@@ -38,8 +38,9 @@ const fetchCourse = `
     AND department = $3;
   `;
   
-  const fetchChapter = 'SELECT chapter, subject FROM chapters WHERE subject = $1';
+const fetchChapter = 'SELECT * FROM chapters WHERE subject = $1';
 
+const fetchTopic = 'SELECT id, topic FROM topics WHERE chapter = $1';
 
   const fetchRoutine = `
 SELECT 
@@ -78,7 +79,7 @@ const enterSubjects =
 "INSERT INTO Subjects(year, semester, subject_code, subject, pdf_link, credit, department) VALUES ($1,$2,$3,$4,$5,$6,$7)";
 
 const enterChapter = 
-"INSERT INTO chapters(chapter , subject) VALUES ($1,$2)";
+"INSERT INTO chapters(chapter , subject) VALUES ($1,$2) returning id";
 
 module.exports = {
   instertIntoProfile,
@@ -92,6 +93,7 @@ module.exports = {
   fetchRoutine,
   enterSubjects,
   fetchChapter,
+  fetchTopic,
   enterChapter,
   fetchAttendance,
 }

@@ -9,6 +9,7 @@ const {
   getRoutine,
   checkOnboardingStatus,
   attendanceDetails,
+  getTopics,
 } = require("../controllers/userController");
 const upload = require("../controllers/uploadController");
 const uploadMiddleware = require("../middlewares/uploadMiddleware");
@@ -21,6 +22,7 @@ router.get("/getAttendance", authenticateUser, attendanceDetails);
 router.post("/editProfile", authenticateUser, editUserProfile);
 router.get("/getCourses", getCourses);
 router.get("/getChapters", getChapters);
+router.get("/getTopics", getTopics);
 router.get("/getRoutine", getRoutine);
 router.get("/search", search);
 router.post("/upload", authenticateUser, uploadMiddleware, upload);

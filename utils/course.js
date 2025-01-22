@@ -9,8 +9,6 @@ const getCourseUrlByDepartmentId = (departmentId) => {
       return 'https://comp.ku.edu.np/static-page/course-catalog-bsc-computer-science';
     case '2':
       return 'https://comp.ku.edu.np/static-page/course-catalog-be-computer-engineering';
-    case '3':
-      return 'https://comp.ku.edu.np/static-page/course-catalog-bsc-information-technology';
     default:
       return null;
   }
